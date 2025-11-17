@@ -7,33 +7,23 @@
 <meta name="description" content="Live prices of top cryptocurrencies.">
 <link rel="stylesheet" href="style.css">
 
-<!-- Adsense + Analytics -->
-<meta name="google-adsense-account" content="ca-pub-3051797649580954">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3051797649580954" crossorigin="anonymous"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KP903HTNPT"></script>
-<script>
-window.dataLayer=window.dataLayer||[];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config','G-KP903HTNPT',{anonymize_ip:true});
-</script>
 <script src="script.js"></script>
 </head>
 <body>
 <div class="container">
 <h1>Live Crypto Tracker</h1>
-<nav>
-<a href="index.html">Home</a> | 
-<a href="live.html">Live Tracker</a> | 
-<a href="gainers.html">Top Gainers</a> | 
-<a href="staking.html">Staking / ROI</a> | 
+<nav class="nav-bar">
+<a href="index.html">Home</a>
+<a href="live.html">Live Tracker</a>
+<a href="gainers.html">Top Gainers</a>
+<a href="staking.html">Staking / ROI</a>
 <a href="guides.html">Guide</a>
 </nav>
 
 <!-- Search Coin -->
 <div class="row">
-<input type="text" id="searchCoinLive" placeholder="Search coin (BTC, ETH...)">
-<button onclick="checkPrice('searchCoinLive','coinPriceLive')">Check Price</button>
+<input type="text" id="searchCoinLive" placeholder="Search coin (BTC, ETH...)" data-live-input data-output="coinPriceLive">
+<button data-coin-btn onclick="checkPrice('searchCoinLive','coinPriceLive')">Check Price</button>
 </div>
 <p id="coinPriceLive" style="font-size:1.2rem;margin-top:10px;"></p>
 
@@ -48,40 +38,8 @@ gtag('config','G-KP903HTNPT',{anonymize_ip:true});
 <th>24H Change</th>
 </tr>
 </thead>
-<tbody>
-<tr><td colspan="4">Loading...</td></tr>
-</tbody>
+<tbody><tr><td colspan="4">Loading...</td></tr></tbody>
 </table>
-
-<!-- Adsense -->
-<div class="ads-block">
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3051797649580954" data-ad-slot="872965908" data-ad-format="auto" data-full-width-responsive="true"></ins>
-<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
 </div>
-
-</div>
-
-<script>
-// Populate top 50 coins table
-function renderTopCoins() {
-  if(!allCoins.length) return;
-  const table=document.getElementById('coinsTable').querySelector('tbody');
-  table.innerHTML='';
-  allCoins.slice(0,50).forEach((c,i)=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${i+1}</td>
-      <td>${c.name} (${c.symbol.toUpperCase()})</td>
-      <td>$${c.current_price.toLocaleString()}</td>
-      <td>${colorText(c.price_change_percentage_24h)}</td>`;
-    table.appendChild(tr);
-  });
-}
-
-// Wait until allCoins loaded
-let checkLoaded=setInterval(()=>{
-  if(allCoins.length){ renderTopCoins(); clearInterval(checkLoaded); }
-},200);
-</script>
-
 </body>
 </html>
