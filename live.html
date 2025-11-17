@@ -7,12 +7,50 @@
 <meta name="description" content="Live prices of top cryptocurrencies.">
 <link rel="stylesheet" href="style.css">
 
+<!-- Adsense + Analytics -->
+<meta name="google-adsense-account" content="ca-pub-3051797649580954">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3051797649580954" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KP903HTNPT"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config','G-KP903HTNPT',{anonymize_ip:true});
+</script>
+
 <script src="script.js"></script>
+<style>
+/* Reuse front page style */
+body { margin:0; font-family:'Segoe UI', sans-serif; background:#0f111a; color:#f5f5f5; }
+.container { max-width:1000px; margin:auto; padding:20px; }
+h1 { text-align:center; margin-bottom:30px; }
+nav { text-align:center; margin-bottom:40px; }
+nav a { color:#4ade80; margin:0 12px; text-decoration:none; font-weight:600; }
+nav a:hover { text-decoration:underline; }
+
+/* Live price search */
+.live-search { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:50px; }
+.live-search input { padding:12px 18px; border-radius:8px; border:none; width:250px; font-size:1rem; background:#1c1f2a; color:#f5f5f5; }
+.live-search button { padding:12px 20px; border:none; border-radius:8px; background:#4ade80; color:#000; font-weight:600; cursor:pointer; transition:0.2s; }
+.live-search button:hover { background:#22c55e; }
+#coinPriceLive { text-align:center; font-size:1.2rem; margin-top:12px; }
+
+/* Top 50 coins table */
+table { width:100%; border-collapse:collapse; margin-bottom:30px; background:#1f2233; border-radius:12px; overflow:hidden; }
+th, td { padding:12px; text-align:left; border-bottom:1px solid #161b22; }
+th { background:#1c1f2a; }
+.positive { color:#4ade80; font-weight:600; }
+.negative { color:#f87171; font-weight:600; }
+
+/* Responsive */
+@media(max-width:600px){ .live-search { flex-direction:column; align-items:center; } }
+</style>
 </head>
 <body>
 <div class="container">
 <h1>Live Crypto Tracker</h1>
-<nav class="nav-bar">
+
+<nav>
 <a href="index.html">Home</a>
 <a href="live.html">Live Tracker</a>
 <a href="gainers.html">Top Gainers</a>
@@ -20,15 +58,15 @@
 <a href="guides.html">Guide</a>
 </nav>
 
-<!-- Search Coin -->
-<div class="row">
-<input type="text" id="searchCoinLive" placeholder="Search coin (BTC, ETH...)" data-live-input data-output="coinPriceLive">
-<button data-coin-btn onclick="checkPrice('searchCoinLive','coinPriceLive')">Check Price</button>
+<!-- Live Coin Price -->
+<div class="live-search">
+<input type="text" id="searchCoinLive" placeholder="Enter coin symbol (BTC, ETH...)">
+<button onclick="checkPrice('searchCoinLive','coinPriceLive')">Check Price</button>
 </div>
-<p id="coinPriceLive" style="font-size:1.2rem;margin-top:10px;"></p>
+<p id="coinPriceLive"></p>
 
 <!-- Top 50 Coins Table -->
-<h2>Top 50 Cryptocurrencies</h2>
+<h2 style="text-align:center; margin-bottom:25px;">Top 50 Cryptocurrencies</h2>
 <table id="coinsTable">
 <thead>
 <tr>
@@ -40,6 +78,44 @@
 </thead>
 <tbody><tr><td colspan="4">Loading...</td></tr></tbody>
 </table>
+
+<!-- Adsense -->
+<div class="ads-block" style="margin:40px 0; text-align:center;">
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3051797649580954" data-ad-slot="872965908" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
 </div>
+
+</div>
+
+<script>
+// Live page JS
+let allCoinsLive = [];
+fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=100')
+.then(res => res.json())
+.then(data => {
+    allCoinsLive = data;
+    renderTop50();
+});
+
+function checkPrice(inputId, outputId){
+    const q = document.getElementById(inputId).value.toLowerCase();
+    const coin = allCoinsLive.find(c => c.id.toLowerCase()===q || c.symbol.toLowerCase()===q);
+    document.getElementById(outputId).innerHTML = coin ? 
+        `${coin.name}: $${coin.current_price.toLocaleString()}` : 'Coin not found';
+}
+
+function renderTop50(){
+    const table = document.getElementById('coinsTable').querySelector('tbody');
+    table.innerHTML='';
+    allCoinsLive.slice(0,50).forEach((c,i)=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${i+1}</td>
+        <td>${c.name} (${c.symbol.toUpperCase()})</td>
+        <td>$${c.current_price.toLocaleString()}</td>
+        <td class="${c.price_change_percentage_24h>=0?'positive':'negative'}">${c.price_change_percentage_24h.toFixed(2)}%</td>`;
+        table.appendChild(tr);
+    });
+}
+</script>
 </body>
 </html>
