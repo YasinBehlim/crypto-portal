@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coin Details</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<nav class="main-nav">
+  <a href="index.html">Home</a>
+  <a href="live.html">Live Tracker</a>
+  <a href="gainers.html">Top Gainers</a>
+  <a href="staking.html">Staking / ROI</a>
+  <a href="guides.html">Guide</a>
+  <a href="about.html">About</a>
+  <a href="privacy.html">Privacy</a>
+</nav>
+
+<h1 id="coinName">Loading...</h1>
+<p id="coinSymbol"></p>
+
+<div class="box">
+  <p><strong>Price (USD):</strong> <span id="coinPrice"></span></p>
+  <p><strong>Market Cap:</strong> <span id="coinMarketCap"></span></p>
+  <p><strong>24h Volume:</strong> <span id="coinVolume"></span></p>
+  <p><strong>Circulating Supply:</strong> <span id="coinSupply"></span></p>
+  <p><strong>24h Change:</strong> <span id="coinChange"></span></p>
+  <p><strong>7-Day Sparkline:</strong></p>
+  <img id="coinSparkline" alt="7-day chart" style="height:60px;">
+</div>
+
+<div class="box" id="coinDesc"></div>
+
+<!-- Ads Block -->
+<div class="ads-block">
+  <ins class="adsbygoogle"
+       style="display:block;height:90px"
+       data-ad-client="ca-pub-XXXXXXXX"
+       data-ad-slot="XXXXXXXX"></ins>
+</div>
+
+</div>
+<script src="script.js"></script>
+<script>
+  // On load, read URL param ?coin=bitcoin
+  const urlParams = new URLSearchParams(window.location.search);
+  const coinId = urlParams.get('coin');
+  if(coinId) {
+    renderCoinDetails(coinId);
+  } else {
+    document.getElementById('coinName').innerText = "Coin not specified.";
+  }
+</script>
+</body>
+</html>
